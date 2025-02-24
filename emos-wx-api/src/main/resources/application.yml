@@ -1,0 +1,103 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      max: 200
+      min-spare: 30
+    connection-timeout: 5000ms
+  port: 8080
+  servlet:
+    context-path: /emos-wx-api
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/emos?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: root
+      password: abc123456
+      initial-size: 8        # 初始链接数量：CPU 内核的 1-2 倍
+      max-active: 16         # 最大连接数量
+      min-idle: 8            # 最小连接数量
+      max-wait: 60000        # 最大连接等待（ms）
+      test-while-idle: true  # 连接空闲时检测连接是否有效
+      test-on-borrow: false
+      test-on-return: false
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: abc123456
+    # 连接池
+    jedis:
+      pool:
+        max-active: 1000  # 最大连接数，Redis 基于内存十分高效，不需要受限于 CPU 内核数量
+        max-wait: -1ms    # 连接等待超时时间
+        max-idle: 16      # 最大空闲连接数
+        min-idle: 8       # 最小空闲连接数
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: emos
+      authentication-database: admin
+      username: admin
+      password: abc123456
+  mail:
+    default-encoding: UTF-8
+    host: smtp.aliyun.com
+    username: 此处是账户@aliyun.com
+    password: 此处是密码
+
+mybatis:
+  # xml 文件的路径
+  mapper-locations: classpath*:mapper/*.xml
+  # pojo 映射类的路径
+  type-aliases-package: com.example.emos.wx.db.pojo
+  configuration:
+    # 开启控制台输出 MyBatis 执行的 SQL 语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 让 MyBatis 支持驼峰命名法
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    # 整体日志输出级别
+    root: info
+    # dao 接口调高日志输出级别：只输出 SQL 语句执行报错的信息，否则输出信息太多了
+    com.example.emos.wx.db.dao : warn
+  pattern:
+    console: "%d{HH:mm:ss}  %-5level  %msg%n"
+
+emos:
+  jwt:
+    # 密钥
+    secret: abc123456
+    # 令牌过期时间（天）
+    expire: 5
+    # 令牌缓存时间（天），为了实现令牌的刷新，在服务端 Redis 缓存令牌
+    cache-expire: 10
+  face:
+    # 创建人脸识别模型
+    createFaceModelUrl: http://192.168.10.200:3000/create_face_model
+    # 人脸识别
+    checkinUrl: http://192.168.10.200:3000/checkin
+  email:
+    system: 发件人邮箱
+    hr: 收件人邮箱
+  # 用户签到自拍照片存储目录
+  image-folder: D:/emos/image
+  code: HelloWorld  # 调用加密组件的url时需要的code
+  recieveNotify: http://127.0.0.1:8080/emos-wx-api/meeting/recieveNotify
+workflow:
+  url: http://192.168.10.200:9090/emos-workflow
+
+trtc:
+  appid: 123
+  key: 123
+  expire: 86400
+wx:
+  # 微信小程序里，需要通过下面两个参数来获取用户的 openId
+  app-id: 123
+  app-secret: 123
