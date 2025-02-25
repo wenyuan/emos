@@ -63,7 +63,5 @@ public class EmosWxApiApplication {
             }
         });
         new File(imageFolder).mkdirs();
-        //生成测试数据
-
     }
 }
