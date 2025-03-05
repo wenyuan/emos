@@ -21,8 +21,8 @@
 
 ```xml
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-jetty</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
 </dependency>
 ```
 
@@ -30,15 +30,15 @@
 
 ```xml
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-web</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
     <!--这里是新加的内容-->
-	<exclusions>
-		<exclusion>
-			<groupId>org.springframework.boot</groupId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-		</exclusion>
-	</exclusions>
+        </exclusion>
+    </exclusions>
 </dependency>
 ```
 
@@ -157,23 +157,23 @@ logging:
 
 ```xml
 <dependency>
-	<groupId>cn.hutool</groupId>
-	<artifactId>hutool-all</artifactId>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
     <version>5.6.3</version>
 </dependency>
 <dependency>
-	<groupId>org.apache.httpcomponents</groupId>
+    <groupId>org.apache.httpcomponents</groupId>
     <artifactId>httpcore</artifactId>
     <version>4.4.13</version>
 </dependency>
 <dependency>
-	<groupId>commons-io</groupId>
+    <groupId>commons-io</groupId>
     <artifactId>commons-io</artifactId>
     <version>2.5</version>
 </dependency>
 <dependency>
-	<groupId>com.google.zxing</groupId>
-	<artifactId>core</artifactId>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
     <version>3.3.3</version>
 </dependency>
 ```
@@ -248,9 +248,9 @@ public class R extends HashMap<String, Object> {
 
 ```xml
 <dependency>
-	<groupId>org.springdoc</groupId>
-	<artifactId>springdoc-openapi-spring-boot-2-webmvc</artifactId>
-	<version>3.1.5</version>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-spring-boot-2-webmvc</artifactId>
+    <version>3.1.5</version>
 </dependency>
 ```
 
@@ -325,7 +325,7 @@ public class UserController {
 
 ## 整合权限验证与授权
 
-在 [emos-wx-api](https://github.com/wenyuan/emos/tree/main/emos-wx-api)](https://github.com/wenyuan/emos/tree/main/emos-wx-api/src/main/java/com/example/emos/wx/config/shiro) 里整合了 Shiro 和 JWT，写了很多的配置信息，而且为了实现 Token 自动续期，还利用上了 ThreadLocal 技术，整个过程比较繁琐。
+在 [emos-wx-api](https://github.com/wenyuan/emos/tree/main/emos-wx-api/src/main/java/com/example/emos/wx/config/shiro) 里整合了 Shiro 和 JWT，写了很多的配置信息，而且为了实现 Token 自动续期，还利用上了 ThreadLocal 技术，整个过程比较繁琐。
 
 这里使用了开源的 [Sa-Token](https://github.com/dromara/Sa-Token) 框架。它的权限验证与授权过程，与 Shiro 非常类似，只不过设计的更加简单，直接跟 JWT 融合在了一起。只需写少量的代码就能把 Sa-Token 整合到 SpringBoot 项目中。
 
@@ -338,21 +338,21 @@ Sa-Token 能做的东西很多，具体可以[见官网](https://sa-token.cc/)�
 ```xml
 <!--核心库-->
 <dependency>
-	<groupId>cn.dev33</groupId>
-	<artifactId>sa-token-spring-boot-starter</artifactId>
-	<version>1.20.0</version>
+    <groupId>cn.dev33</groupId>
+    <artifactId>sa-token-spring-boot-starter</artifactId>
+    <version>1.20.0</version>
 </dependency>
 <!--用Redis缓存授权信息-->
 <dependency>
-	<groupId>cn.dev33</groupId>
-	<artifactId>sa-token-dao-redis</artifactId>
-	<version>1.20.0</version>
+    <groupId>cn.dev33</groupId>
+    <artifactId>sa-token-dao-redis</artifactId>
+    <version>1.20.0</version>
 </dependency>
 <!--注解式权限验证-->
 <dependency>
-	<groupId>cn.dev33</groupId>
-	<artifactId>sa-token-spring-aop</artifactId>
-	<version>1.20.0</version>
+    <groupId>cn.dev33</groupId>
+    <artifactId>sa-token-spring-aop</artifactId>
+    <version>1.20.0</version>
 </dependency>
 ```
 
