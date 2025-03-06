@@ -12,9 +12,9 @@ import java.util.Set;
 public interface TbUserDao {
     public Set<String> searchUserPermissions(int userId);
 
-    public HashMap searchById(int userId);
-
     public Integer searchIdByOpenId(String openId);
+
+    public HashMap searchById(int userId);
 
     public HashMap searchUserSummary(int userId);
 
@@ -26,4 +26,21 @@ public interface TbUserDao {
 
     public ArrayList<HashMap> searchAllUser();
 
+    public Integer login(HashMap param);
+
+    public int updatePassword(HashMap param);
+
+    public ArrayList<HashMap> searchUserByPage(HashMap param);
+
+    public long searchUserCount(HashMap param);
+
+    public int insert(TbUser user);
+
+    public int update(HashMap param);
+
+    public int deleteUserByIds(Integer[] ids);
+
+    public ArrayList<String> searchUserRoles(int userId);
+
+    public HashMap searchNameAndDept(int userId);
 }

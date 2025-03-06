@@ -61,9 +61,11 @@ sa-token:
   #关闭读取Cookie中Token
   isReadCookie: true
 
+
+
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: com.example.emos.wx.db.pojo
+  type-aliases-package: com.example.emos.api.db.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
@@ -71,7 +73,7 @@ mybatis:
 logging:
   level:
     root: info
-    com.example.emos.wx.db.dao: warn
+    com.example.emos.api.db.dao: warn
   pattern:
     console: "%d{yyyy/MM/dd HH:mm:ss}  %-5level  %msg%n"
 
@@ -87,11 +89,11 @@ tencent:
     appId: 腾讯云APPID
     secretId: 腾讯云SecretId
     secretKey: 腾讯云SecretKey
-    region: 存储桶的区域
-    bucket: 存储桶的名字
+    region: 存储桶地域名称
+    bucket: 存储桶名字
   trtc:
-    appId: 你自己TRTC的APPID
-    secretKey: 你自己TRTC的密钥
+    appId: TRTC的APPID
+    secretKey: TRTC的密钥
     expire: 86400
 wx:
   app-id: 你自己微信小程序APPID

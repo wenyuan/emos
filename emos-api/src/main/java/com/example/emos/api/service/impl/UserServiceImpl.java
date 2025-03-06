@@ -7,7 +7,9 @@ import cn.hutool.extra.qrcode.QrConfig;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.example.emos.api.common.util.PageUtils;
 import com.example.emos.api.db.dao.TbUserDao;
+import com.example.emos.api.db.pojo.TbUser;
 import com.example.emos.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +32,8 @@ public class UserServiceImpl implements UserService {
 //    @Value("${workflow.url}")
 //    private String workflow;
 
-//    @Value("${emos.code}")
-//    private String code;
+    @Value("${emos.code}")
+    private String code;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -107,6 +109,46 @@ public class UserServiceImpl implements UserService {
         return list;
     }
 
+    @Override
+    public Integer login(HashMap param) {
+        Integer userId = userDao.login(param);
+        return userId;
+    }
+
+    @Override
+    public int updatePassword(HashMap param) {
+        int rows = userDao.updatePassword(param);
+        return rows;
+    }
+
+    @Override
+    public PageUtils searchUserByPage(HashMap param) {
+        ArrayList<HashMap> list=userDao.searchUserByPage(param);
+        long count=userDao.searchUserCount(param);
+        int start=(Integer) param.get("start");
+        int length=(Integer) param.get("length");
+        PageUtils pageUtils=new PageUtils(list,count,start,length);
+        return pageUtils;
+    }
+
+    @Override
+    public int insert(TbUser user) {
+        int rows=userDao.insert(user);
+        return rows;
+    }
+
+    @Override
+    public int update(HashMap param) {
+        int rows= userDao.update(param);
+        return rows;
+    }
+
+    @Override
+    public int deleteUserByIds(Integer[] ids) {
+        int rows=userDao.deleteUserByIds(ids);
+        return rows;
+    }
+
     private String getOpenId(String code) {
         String url = "https://api.weixin.qq.com/sns/jscode2session";
         HashMap map = new HashMap();
@@ -121,5 +163,17 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("临时登陆凭证错误");
         }
         return openId;
+    }
+
+    @Override
+    public ArrayList<String> searchUserRoles(int userId) {
+        ArrayList<String> list = userDao.searchUserRoles(userId);
+        return list;
+    }
+
+    @Override
+    public HashMap searchNameAndDept(int userId) {
+        HashMap map=userDao.searchNameAndDept(userId);
+        return map;
     }
 }

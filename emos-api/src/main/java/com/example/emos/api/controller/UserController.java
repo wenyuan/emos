@@ -4,10 +4,12 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.json.JSONUtil;
+import com.example.emos.api.common.util.PageUtils;
 import com.example.emos.api.common.util.R;
-import com.example.emos.api.controller.form.CheckQrCodeForm;
-import com.example.emos.api.controller.form.SearchUserByIdForm;
-import com.example.emos.api.controller.form.WechatLoginForm;
+import com.example.emos.api.controller.form.*;
+import com.example.emos.api.db.pojo.TbUser;
 import com.example.emos.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -91,4 +94,103 @@ public class UserController {
         ArrayList<HashMap> list = userService.searchAllUser();
         return R.ok().put("list", list);
     }
+
+    @PostMapping("/login")
+    @Operation(summary = "登陆系统")
+    public R login(@Valid @RequestBody LoginForm form){
+        HashMap param= JSONUtil.parse(form).toBean(HashMap.class);
+        Integer userId=userService.login(param);
+        R r=R.ok().put("result",userId!=null?true:false);
+        if(userId!=null){
+            StpUtil.setLoginId(userId);
+//            StpUtil.login(userId);
+            Set<String> permissions=userService.searchUserPermissions(userId);
+            String token=StpUtil.getTokenInfo().getTokenValue();
+            r.put("permissions",permissions).put("token",token);
+        }
+        return r;
+    }
+
+    @GetMapping("/logout")
+    @Operation(summary = "退出系统")
+    public R logout(){
+        StpUtil.logout();
+        return R.ok();
+    }
+
+    @PostMapping("/updatePassword")
+    @SaCheckLogin
+    @Operation(summary = "修改密码")
+    public R updatePassword(@Valid @RequestBody UpdatePasswordForm form){
+        int userId=StpUtil.getLoginIdAsInt();
+        HashMap param=new HashMap(){{
+            put("userId",userId);
+            put("password",form.getPassword());
+        }};
+        int rows=userService.updatePassword(param);
+        return R.ok().put("rows",rows);
+    }
+    @PostMapping("/searchUserByPage")
+    @Operation(summary = "查询用户分页记录")
+    @SaCheckPermission(value = {"ROOT", "USER:SELECT"}, mode = SaMode.OR)
+    public R searchUserByPage(@Valid @RequestBody SearchUserByPageForm form){
+        int page=form.getPage();
+        int length=form.getLength();
+        int start=(page-1)*length;
+        HashMap param=JSONUtil.parse(form).toBean(HashMap.class);
+        param.put("start",start);
+        PageUtils pageUtils=userService.searchUserByPage(param);
+        return R.ok().put("page",pageUtils);
+    }
+
+    @PostMapping("/insert")
+    @SaCheckPermission(value = {"ROOT", "USER:INSERT"}, mode = SaMode.OR)
+    @Operation(summary = "添加用户")
+    public R insert(@Valid @RequestBody InsertUserForm form){
+        TbUser user=JSONUtil.parse(form).toBean(TbUser.class);
+        user.setStatus((byte)1);
+        user.setRole(JSONUtil.parseArray(form.getRole()).toString());
+        user.setCreateTime(new Date());
+        int rows=userService.insert(user);
+        return R.ok().put("rows",rows);
+    }
+
+    @PostMapping("/update")
+    @SaCheckPermission(value = {"ROOT", "USER:UPDATE"}, mode = SaMode.OR)
+    @Operation(summary = "修改用户")
+    public R update(@Valid @RequestBody UpdateUserForm form){
+        HashMap param=JSONUtil.parse(form).toBean(HashMap.class);
+        param.replace("role",JSONUtil.parseArray(form.getRole()).toString());
+        int rows=userService.update(param);
+        if(rows==1){
+            StpUtil.logoutByLoginId(form.getUserId());
+        }
+        return R.ok().put("rows",rows);
+    }
+
+    @PostMapping("/deleteUserByIds")
+    @SaCheckPermission(value = {"ROOT", "USER:DELETE"}, mode = SaMode.OR)
+    @Operation(summary = "删除用户")
+    public R deleteUserByIds(@Valid @RequestBody DeleteUserByIdsForm form){
+        Integer userId=StpUtil.getLoginIdAsInt();
+        if(ArrayUtil.contains(form.getIds(),userId)){
+            return R.error("您不能删除自己的帐户");
+        }
+        int rows=userService.deleteUserByIds(form.getIds());
+        if(rows>0){
+            for (Integer id:form.getIds()){
+                StpUtil.logoutByLoginId(id);
+            }
+        }
+        return R.ok().put("rows",rows);
+    }
+
+    @PostMapping("/searchNameAndDept")
+    @Operation(summary = "查找员工姓名和部门")
+    @SaCheckLogin
+    public R searchNameAndDept(@Valid @RequestBody SearchNameAndDeptForm form){
+        HashMap map=userService.searchNameAndDept(form.getId());
+        return R.ok(map);
+    }
+
 }
