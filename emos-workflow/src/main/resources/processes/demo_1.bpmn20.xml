@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                   xmlns:flowable="http://flowable.org/bpmn" id="diagram_Process_1741250147079"
+                   targetNamespace="http://flowable.org/bpmn"
+                   xmlns:activiti="http://activiti.org/bpmn"
+                   xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+    <bpmn2:process id="Process_1741250147079" name="业务流程_1741250147079" isExecutable="true">
+        <bpmn2:startEvent id="Event_10v2u3l">
+            <bpmn2:extensionElements>
+                <flowable:formData/>
+            </bpmn2:extensionElements>
+            <bpmn2:outgoing>Flow_0c6cy93</bpmn2:outgoing>
+        </bpmn2:startEvent>
+        <bpmn2:serviceTask id="Activity_1fpdy0y" name="服务任务1" activiti:class="com.example.emos.workflow.demo_1.MyService_1">
+            <bpmn2:incoming>Flow_0c6cy93</bpmn2:incoming>
+            <bpmn2:outgoing>Flow_1t1uqjp</bpmn2:outgoing>
+        </bpmn2:serviceTask>
+        <bpmn2:sequenceFlow id="Flow_0c6cy93" sourceRef="Event_10v2u3l" targetRef="Activity_1fpdy0y"/>
+        <bpmn2:serviceTask id="Activity_1b4m8nu" name="服务任务2" activiti:class="com.example.emos.workflow.demo_1.MyService_2">
+            <bpmn2:incoming>Flow_1t1uqjp</bpmn2:incoming>
+            <bpmn2:outgoing>Flow_04yf8yg</bpmn2:outgoing>
+        </bpmn2:serviceTask>
+        <bpmn2:sequenceFlow id="Flow_1t1uqjp" sourceRef="Activity_1fpdy0y" targetRef="Activity_1b4m8nu"/>
+        <bpmn2:endEvent id="Event_0qsdsnc">
+            <bpmn2:incoming>Flow_04yf8yg</bpmn2:incoming>
+        </bpmn2:endEvent>
+        <bpmn2:sequenceFlow id="Flow_04yf8yg" sourceRef="Activity_1b4m8nu" targetRef="Event_0qsdsnc"/>
+    </bpmn2:process>
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1741250147079">
+            <bpmndi:BPMNEdge id="Flow_0c6cy93_di" bpmnElement="Flow_0c6cy93">
+                <di:waypoint x="328" y="300"/>
+                <di:waypoint x="420" y="300"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_1t1uqjp_di" bpmnElement="Flow_1t1uqjp">
+                <di:waypoint x="520" y="300"/>
+                <di:waypoint x="610" y="300"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_04yf8yg_di" bpmnElement="Flow_04yf8yg">
+                <di:waypoint x="710" y="300"/>
+                <di:waypoint x="762" y="300"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="Activity_1fpdy0y_di" bpmnElement="Activity_1fpdy0y">
+                <dc:Bounds x="420" y="260" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Event_10v2u3l_di" bpmnElement="Event_10v2u3l">
+                <dc:Bounds x="292" y="282" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_1b4m8nu_di" bpmnElement="Activity_1b4m8nu">
+                <dc:Bounds x="610" y="260" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Event_0qsdsnc_di" bpmnElement="Event_0qsdsnc">
+                <dc:Bounds x="762" y="282" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
